@@ -1,0 +1,453 @@
+
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --navy: #0C2D4E;
+  --navy-mid: #185FA5;
+  --navy-light: #E6F1FB;
+  --teal: #0F6E56;
+  --teal-light: #E1F5EE;
+  --gold: #7A5C00;
+  --gold-light: #FFF8E1;
+}
+.wrap { max-width: 680px; padding: 0; font-family: var(--font-sans); }
+.page-header { background: var(--color-background-primary); border-bottom: 1px solid var(--color-border-tertiary); padding: 1.75rem 1.5rem 1.25rem; text-align: center; }
+.clinic-name { font-size: 11px; letter-spacing: 0.12em; color: var(--color-text-secondary); text-transform: uppercase; margin-bottom: 0.5rem; }
+.doctor-name { font-size: 18px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 0.25rem; }
+.doctor-sub { font-size: 13px; color: var(--color-text-secondary); margin-bottom: 1rem; }
+.divider-line { width: 48px; height: 2px; background: #185FA5; margin: 0.75rem auto; border-radius: 1px; }
+.hero-title { font-size: 20px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 0.4rem; }
+.hero-sub { font-size: 13px; color: var(--color-text-secondary); line-height: 1.6; max-width: 440px; margin: 0 auto; }
+.prog-area { padding: 1rem 1.5rem 0.25rem; border-bottom: 0.5px solid var(--color-border-tertiary); }
+.prog-bar { height: 3px; background: var(--color-border-tertiary); border-radius: 2px; margin-bottom: 0.5rem; }
+.prog-fill { height: 100%; background: #185FA5; border-radius: 2px; transition: width 0.4s ease; }
+.prog-meta { display: flex; justify-content: space-between; font-size: 12px; color: var(--color-text-secondary); padding-bottom: 0.75rem; }
+.q-area { padding: 1.25rem 1.5rem; }
+.q-card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 1.25rem; }
+.q-header { display: flex; align-items: center; gap: 10px; margin-bottom: 0.75rem; }
+.q-num { width: 28px; height: 28px; border-radius: 50%; background: #E6F1FB; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 500; color: #185FA5; flex-shrink: 0; }
+.q-title { font-size: 15px; font-weight: 500; color: var(--color-text-primary); line-height: 1.4; }
+.q-hint { font-size: 12px; color: var(--color-text-secondary); margin-bottom: 1rem; margin-top: 2px; padding-left: 38px; }
+.vision-demo { background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 0.75rem; margin-bottom: 1rem; }
+.demo-label { font-size: 11px; letter-spacing: 0.08em; color: var(--color-text-secondary); text-transform: uppercase; margin-bottom: 0.5rem; text-align: center; }
+.demo-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.demo-box { border-radius: var(--border-radius-md); overflow: hidden; }
+.demo-box canvas { display: block; width: 100%; }
+.demo-cap { font-size: 11px; color: var(--color-text-secondary); text-align: center; margin-top: 4px; }
+.opts { display: flex; flex-direction: column; gap: 7px; }
+.opt { display: flex; align-items: flex-start; gap: 10px; padding: 9px 12px; border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-md); cursor: pointer; transition: border-color 0.12s, background 0.12s; }
+.opt:hover { background: var(--color-background-secondary); border-color: var(--color-border-secondary); }
+.opt.sel { border-color: #185FA5; background: #E6F1FB; }
+.radio { width: 16px; height: 16px; border-radius: 50%; border: 1.5px solid var(--color-border-secondary); flex-shrink: 0; margin-top: 1px; display: flex; align-items: center; justify-content: center; transition: all 0.12s; }
+.opt.sel .radio { border-color: #185FA5; background: #185FA5; }
+.opt.sel .radio::after { content:''; width:6px; height:6px; border-radius:50%; background:white; display:block; }
+.opt-lbl { font-size: 14px; color: var(--color-text-primary); line-height: 1.4; }
+.opt-desc { font-size: 12px; color: var(--color-text-secondary); margin-top: 2px; }
+.nav-row { display: flex; gap: 8px; padding: 0.75rem 1.5rem 1.25rem; border-top: 0.5px solid var(--color-border-tertiary); }
+.btn-back { padding: 9px 18px; border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); background: transparent; color: var(--color-text-secondary); font-size: 14px; cursor: pointer; display: flex; align-items: center; gap: 6px; }
+.btn-back:hover { background: var(--color-background-secondary); }
+.btn-next { flex: 1; padding: 9px 18px; border: 0.5px solid #185FA5; border-radius: var(--border-radius-md); background: #185FA5; color: white; font-size: 14px; font-weight: 500; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; }
+.btn-next:disabled { opacity: 0.35; cursor: not-allowed; }
+.res-section { padding: 1.25rem 1.5rem; }
+.res-doctor { text-align: center; padding: 1.25rem 1rem; border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); margin-bottom: 1.25rem; background: var(--color-background-secondary); }
+.score-wrap { margin-bottom: 1rem; }
+.score-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.score-lbl { font-size: 13px; color: var(--color-text-secondary); min-width: 90px; }
+.score-track { flex: 1; height: 8px; background: var(--color-border-tertiary); border-radius: 4px; overflow: hidden; }
+.sf-blue { height: 100%; background: #185FA5; border-radius: 4px; transition: width 0.7s ease; }
+.sf-teal { height: 100%; background: #1D9E75; border-radius: 4px; transition: width 0.7s ease; }
+.sf-coral { height: 100%; background: #993C1D; border-radius: 4px; transition: width 0.7s ease; }
+.score-pct { font-size: 13px; font-weight: 500; color: var(--color-text-primary); min-width: 36px; text-align: right; }
+.lens-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; margin-bottom: 1.25rem; }
+.lens-card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 1.1rem; }
+.lens-card.primary { border: 2px solid #185FA5; }
+.lens-card.second { border: 2px solid #1D9E75; }
+.lbadge { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; padding: 3px 9px; border-radius: 12px; margin-bottom: 8px; font-weight: 500; }
+.lbadge.p { background: #E6F1FB; color: #0C447C; }
+.lbadge.s { background: #E1F5EE; color: #085041; }
+.lname { font-size: 14px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 2px; }
+.lsub { font-size: 12px; color: var(--color-text-secondary); margin-bottom: 10px; }
+.lpros { list-style: none; }
+.lpros li { font-size: 12px; color: var(--color-text-secondary); padding: 2px 0; display: flex; gap: 6px; align-items: flex-start; line-height: 1.4; }
+.lpros li i { color: #1D9E75; font-size: 13px; flex-shrink: 0; margin-top: 1px; }
+.caution { background: var(--color-background-warning); border: 0.5px solid var(--color-border-warning); border-radius: var(--border-radius-md); padding: 0.9rem 1rem; margin-bottom: 1rem; display: flex; gap: 10px; }
+.caution i { color: var(--color-text-warning); font-size: 18px; flex-shrink: 0; }
+.caution-txt { font-size: 13px; color: var(--color-text-warning); line-height: 1.6; }
+.disclaimer { background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 1rem 1.1rem; font-size: 12px; color: var(--color-text-secondary); line-height: 1.6; display: flex; gap: 8px; }
+.disclaimer i { flex-shrink: 0; font-size: 16px; margin-top: 1px; }
+.page-footer { border-top: 1px solid var(--color-border-tertiary); padding: 1rem 1.5rem; text-align: center; margin-top: 1rem; }
+.footer-doctor { font-size: 13px; font-weight: 500; color: var(--color-text-primary); }
+.footer-sub { font-size: 12px; color: var(--color-text-secondary); margin-top: 2px; }
+.btn-restart { width: 100%; padding: 9px; border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); background: transparent; color: var(--color-text-secondary); font-size: 14px; cursor: pointer; margin-top: 1rem; display: flex; align-items: center; justify-content: center; gap: 6px; }
+.btn-restart:hover { background: var(--color-background-secondary); }
+</style>
+
+<h2 class="sr-only">แบบประเมินความเหมาะสมของเลนส์แก้วตาเทียม โดย นพ.ณัฐวัฒน์ วงษ์ไชยคณากร</h2>
+
+<div class="wrap" id="app">
+  <div class="page-header">
+    <div class="clinic-name">แบบประเมินก่อนผ่าตัดต้อกระจก</div>
+    <div class="doctor-name">นพ.ณัฐวัฒน์ วงษ์ไชยคณากร</div>
+    <div class="doctor-sub">จักษุแพทย์ผู้เชี่ยวชาญด้านต้อกระจกและการผ่าตัดเปลี่ยนเลนส์แก้วตา</div>
+    <div class="divider-line"></div>
+    <div class="hero-title">ค้นหาเลนส์แก้วตาเทียมที่เหมาะกับคุณ</div>
+    <div class="hero-sub">ตอบคำถาม 8 ข้อ เพื่อประเมินความเหมาะสมระหว่าง Monofocal · EDOF · Multifocal</div>
+  </div>
+
+  <div id="quiz-wrap">
+    <div class="prog-area">
+      <div class="prog-bar"><div class="prog-fill" id="prog" style="width:12.5%"></div></div>
+      <div class="prog-meta"><span id="qnum">คำถาม 1 จาก 8</span><span id="qpct">13%</span></div>
+    </div>
+    <div class="q-area" id="q-area"></div>
+    <div class="nav-row">
+      <button class="btn-back" id="btn-back" onclick="goBack()"><i class="ti ti-arrow-left" aria-hidden="true"></i> ย้อนกลับ</button>
+      <button class="btn-next" id="btn-next" onclick="goNext()" disabled>ถัดไป <i class="ti ti-arrow-right" aria-hidden="true"></i></button>
+    </div>
+  </div>
+
+  <div id="res-wrap" style="display:none"></div>
+</div>
+
+<script>
+const Qs = [
+  {
+    icon:"ti-book",
+    text:"คุณต้องการอ่านหนังสือ หรือทำงานระยะใกล้โดยไม่พึ่งแว่นตาหรือไม่?",
+    hint:"ระยะใกล้ประมาณ 30–40 ซม. เช่น อ่านหนังสือ เย็บปักถักร้อย งานฝีมือ",
+    opts:[
+      {l:"ต้องการมาก ทำเป็นประจำทุกวัน", d:"", s:{mo:0,ed:1,mu:3}},
+      {l:"ต้องการบ้าง แต่ใส่แว่นได้ถ้าจำเป็น", d:"", s:{mo:1,ed:2,mu:2}},
+      {l:"ไม่ค่อยทำงานระยะใกล้ ใส่แว่นได้", d:"", s:{mo:3,ed:1,mu:0}},
+    ]
+  },
+  {
+    icon:"ti-device-laptop",
+    text:"คุณใช้คอมพิวเตอร์ หรือแท็บเล็ตบ่อยแค่ไหน?",
+    hint:"ระยะกลางประมาณ 60–80 ซม.",
+    opts:[
+      {l:"ใช้เป็นประจำ วันละหลายชั่วโมง", d:"ทำงานออฟฟิศ หรือดูคอนเทนต์", s:{mo:0,ed:3,mu:2}},
+      {l:"ใช้บ้าง สัปดาห์ละ 2–3 ครั้ง", d:"", s:{mo:1,ed:2,mu:2}},
+      {l:"แทบไม่ใช้เลย", d:"", s:{mo:2,ed:1,mu:1}},
+    ]
+  },
+  {
+    icon:"ti-car",
+    text:"คุณขับรถในเวลากลางคืนบ่อยไหม?",
+    hint:"เลนส์บางชนิดอาจทำให้เห็น halo (วงแสง) หรือ glare (แสงจ้า) รอบดวงไฟ ดูภาพตัวอย่างด้านล่าง",
+    hasVision: true,
+    opts:[
+      {l:"ขับบ่อย ต้องการเห็นชัดทุกสภาวะ", d:"", s:{mo:3,ed:2,mu:0}},
+      {l:"ขับบางครั้ง รับได้กับ glare เล็กน้อย", d:"", s:{mo:2,ed:3,mu:1}},
+      {l:"แทบไม่ขับกลางคืน", d:"", s:{mo:1,ed:2,mu:3}},
+    ]
+  },
+  {
+    icon:"ti-eye-check",
+    text:"ตาของคุณมีปัญหาเหล่านี้หรือไม่?",
+    hint:"กรุณาเลือกข้อที่ตรงกับสภาพตาของคุณมากที่สุด",
+    opts:[
+      {l:"ไม่มีปัญหาพิเศษ", d:"ไม่มีโรคจอตา หรือต้อหิน", s:{mo:1,ed:2,mu:3}},
+      {l:"มีโรคจอตา หรือต้อหิน", d:"จอตาเสื่อมตามอายุ เบาหวานขึ้นจอตา ต้อหิน", s:{mo:3,ed:1,mu:0}},
+      {l:"มีสายตาเอียงมาก (astigmatism สูง)", d:"เอียงมากกว่า 1.5 diopter", s:{mo:0,ed:2,mu:1}},
+    ]
+  },
+  {
+    icon:"ti-glasses",
+    text:"ความคาดหวังเรื่องการพึ่งพาแว่นตาหลังผ่าตัด",
+    hint:"คุณยอมรับการใส่แว่นในบางสถานการณ์ได้ไหม?",
+    opts:[
+      {l:"อยากเลิกแว่นให้ได้มากที่สุด", d:"ยอมรับ halo/glare ได้บ้าง", s:{mo:0,ed:2,mu:3}},
+      {l:"ลดการใส่แว่น แต่ยอมใส่ได้ถ้าต้องการ", d:"ต้องการคุณภาพกลางคืนที่ดี", s:{mo:1,ed:3,mu:1}},
+      {l:"ใส่แว่นก็ไม่เป็นไร ขอให้ชัดที่สุด", d:"ให้ความสำคัญกับคุณภาพภาพมากกว่า", s:{mo:3,ed:1,mu:0}},
+    ]
+  },
+  {
+    icon:"ti-heart",
+    text:"กิจกรรมยามว่างที่คุณทำเป็นประจำ",
+    hint:"เลือกข้อที่ตรงกับไลฟ์สไตล์ของคุณมากที่สุด",
+    opts:[
+      {l:"กีฬากลางแจ้ง ท่องเที่ยว ดูวิว", d:"ต้องการมองไกลชัด", s:{mo:3,ed:2,mu:1}},
+      {l:"อ่านหนังสือ งานฝีมือ ทำอาหาร", d:"ต้องการมองใกล้-กลางชัด", s:{mo:0,ed:1,mu:3}},
+      {l:"ดูทีวี ใช้โทรศัพท์ กิจกรรมทั่วไป", d:"ต้องการมองระยะกลางเป็นหลัก", s:{mo:1,ed:3,mu:2}},
+    ]
+  },
+  {
+    icon:"ti-sun",
+    text:"คุณไวต่อการเห็น halo หรือ glare รอบดวงไฟมากแค่ไหน?",
+    hint:"เลนส์ multifocal อาจทำให้เห็น halo มากกว่าชนิดอื่น ดูภาพเปรียบเทียบด้านล่าง",
+    hasVision: true,
+    opts:[
+      {l:"ไม่ไวเลย รับได้กับแสงกระจาย", d:"", s:{mo:1,ed:2,mu:3}},
+      {l:"ไวพอสมควร แต่พอปรับตัวได้", d:"", s:{mo:2,ed:3,mu:1}},
+      {l:"ไวมาก แสงรบกวนทำให้ไม่สบาย", d:"", s:{mo:3,ed:2,mu:0}},
+    ]
+  },
+  {
+    icon:"ti-currency-baht",
+    text:"ข้อพิจารณาด้านค่าใช้จ่าย",
+    hint:"เลนส์ชนิดพิเศษมีค่าใช้จ่ายสูงกว่าเลนส์มาตรฐาน",
+    opts:[
+      {l:"ยืดหยุ่นได้ ถ้าเลนส์ดีกว่าก็คุ้ม", d:"", s:{mo:1,ed:3,mu:3}},
+      {l:"งบปานกลาง เลนส์กลาง ๆ ก็พอ", d:"", s:{mo:2,ed:3,mu:1}},
+      {l:"ต้องการควบคุมค่าใช้จ่าย", d:"เลนส์มาตรฐานในสิทธิ์รักษา", s:{mo:3,ed:0,mu:0}},
+    ]
+  }
+];
+
+let cur = 0, ans = new Array(Qs.length).fill(null);
+
+function drawVisionDemo(canvasId, type) {
+  const c = document.getElementById(canvasId);
+  if (!c) return;
+  const ctx = c.getContext('2d');
+  const W = c.width, H = c.height;
+  ctx.clearRect(0, 0, W, H);
+  ctx.fillStyle = '#0a0a12';
+  ctx.fillRect(0, 0, W, H);
+  const cx = W / 2, cy = H / 2;
+  if (type === 'normal') {
+    ctx.beginPath();
+    ctx.arc(cx, cy, 14, 0, Math.PI * 2);
+    ctx.fillStyle = '#FFFBE6';
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(cx, cy, 10, 0, Math.PI * 2);
+    ctx.fillStyle = '#FFFFFF';
+    ctx.fill();
+    ctx.font = '11px sans-serif';
+    ctx.fillStyle = '#9FA3B0';
+    ctx.textAlign = 'center';
+    ctx.fillText('ปกติ (Monofocal)', cx, H - 8);
+  } else if (type === 'halo') {
+    for (let r = 44; r >= 8; r -= 4) {
+      const a = 0.03 + (44 - r) * 0.005;
+      ctx.beginPath();
+      ctx.arc(cx, cy, r, 0, Math.PI * 2);
+      ctx.strokeStyle = `rgba(255,240,180,${a})`;
+      ctx.lineWidth = 3;
+      ctx.stroke();
+    }
+    ctx.beginPath();
+    ctx.arc(cx, cy, 14, 0, Math.PI * 2);
+    ctx.fillStyle = '#FFFBE6';
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(cx, cy, 10, 0, Math.PI * 2);
+    ctx.fillStyle = '#FFFFFF';
+    ctx.fill();
+    ctx.font = '11px sans-serif';
+    ctx.fillStyle = '#9FA3B0';
+    ctx.textAlign = 'center';
+    ctx.fillText('Halo (วงแสง)', cx, H - 8);
+  } else if (type === 'glare') {
+    const spikes = 10;
+    for (let i = 0; i < spikes; i++) {
+      const angle = (i / spikes) * Math.PI * 2;
+      const len = 36 + Math.random() * 20;
+      const grd = ctx.createLinearGradient(cx, cy, cx + Math.cos(angle) * len, cy + Math.sin(angle) * len);
+      grd.addColorStop(0, 'rgba(255,248,180,0.7)');
+      grd.addColorStop(1, 'rgba(255,248,180,0)');
+      ctx.beginPath();
+      ctx.moveTo(cx, cy);
+      ctx.lineTo(cx + Math.cos(angle) * len, cy + Math.sin(angle) * len);
+      ctx.strokeStyle = grd;
+      ctx.lineWidth = 2.5;
+      ctx.stroke();
+    }
+    ctx.beginPath();
+    ctx.arc(cx, cy, 14, 0, Math.PI * 2);
+    ctx.fillStyle = '#FFFBE6';
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(cx, cy, 10, 0, Math.PI * 2);
+    ctx.fillStyle = '#FFFFFF';
+    ctx.fill();
+    ctx.font = '11px sans-serif';
+    ctx.fillStyle = '#9FA3B0';
+    ctx.textAlign = 'center';
+    ctx.fillText('Glare (แสงจ้า)', cx, H - 8);
+  }
+}
+
+function renderQ() {
+  const q = Qs[cur];
+  const pct = Math.round(((cur + 1) / Qs.length) * 100);
+  document.getElementById('prog').style.width = pct + '%';
+  document.getElementById('qnum').textContent = `คำถาม ${cur + 1} จาก ${Qs.length}`;
+  document.getElementById('qpct').textContent = pct + '%';
+  document.getElementById('btn-back').style.display = cur === 0 ? 'none' : 'flex';
+  document.getElementById('btn-next').disabled = ans[cur] === null;
+
+  const visionBlock = q.hasVision ? `
+    <div class="vision-demo">
+      <div class="demo-label">ภาพจำลองการมองเห็นแสงกลางคืน</div>
+      <div class="demo-row">
+        <div class="demo-box"><canvas id="cv1" width="160" height="110"></canvas><div class="demo-cap">ปกติ · Monofocal</div></div>
+        <div class="demo-box"><canvas id="cv2" width="160" height="110"></canvas><div class="demo-cap">Halo (วงแสง) · Multifocal</div></div>
+      </div>
+      <div class="demo-row" style="margin-top:6px">
+        <div class="demo-box"><canvas id="cv3" width="160" height="110"></canvas><div class="demo-cap">Glare (แสงจ้า) · ทั่วไป</div></div>
+        <div class="demo-box"><canvas id="cv4" width="160" height="110"></canvas><div class="demo-cap">Halo+Glare · Multifocal รุนแรง</div></div>
+      </div>
+    </div>
+  ` : '';
+
+  document.getElementById('q-area').innerHTML = `
+    <div class="q-card">
+      <div class="q-header">
+        <div class="q-num">${cur + 1}</div>
+        <div class="q-title">${q.text}</div>
+      </div>
+      <div class="q-hint">${q.hint}</div>
+      ${visionBlock}
+      <div class="opts">
+        ${q.opts.map((o, i) => `
+          <div class="opt ${ans[cur] === i ? 'sel' : ''}" onclick="pick(${i})">
+            <div class="radio"></div>
+            <div>
+              <div class="opt-lbl">${o.l}</div>
+              ${o.d ? `<div class="opt-desc">${o.d}</div>` : ''}
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `;
+
+  if (q.hasVision) {
+    setTimeout(() => {
+      drawVisionDemo('cv1', 'normal');
+      drawVisionDemo('cv2', 'halo');
+      drawVisionDemo('cv3', 'glare');
+      drawHaloPlusGlare('cv4');
+    }, 30);
+  }
+}
+
+function drawHaloPlusGlare(id) {
+  const c = document.getElementById(id);
+  if (!c) return;
+  const ctx = c.getContext('2d');
+  const W = c.width, H = c.height;
+  ctx.clearRect(0, 0, W, H);
+  ctx.fillStyle = '#0a0a12';
+  ctx.fillRect(0, 0, W, H);
+  const cx = W / 2, cy = H / 2;
+  for (let r = 50; r >= 8; r -= 4) {
+    const a = 0.025 + (50 - r) * 0.004;
+    ctx.beginPath();
+    ctx.arc(cx, cy, r, 0, Math.PI * 2);
+    ctx.strokeStyle = `rgba(255,240,180,${a})`;
+    ctx.lineWidth = 3;
+    ctx.stroke();
+  }
+  const spikes = 8;
+  for (let i = 0; i < spikes; i++) {
+    const angle = (i / spikes) * Math.PI * 2;
+    const len = 42;
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.lineTo(cx + Math.cos(angle) * len, cy + Math.sin(angle) * len);
+    ctx.strokeStyle = 'rgba(255,248,180,0.35)';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+  }
+  ctx.beginPath();
+  ctx.arc(cx, cy, 13, 0, Math.PI * 2);
+  ctx.fillStyle = '#FFFBE6';
+  ctx.fill();
+  ctx.beginPath();
+  ctx.arc(cx, cy, 9, 0, Math.PI * 2);
+  ctx.fillStyle = '#FFFFFF';
+  ctx.fill();
+  ctx.font = '11px sans-serif';
+  ctx.fillStyle = '#9FA3B0';
+  ctx.textAlign = 'center';
+  ctx.fillText('Halo+Glare รุนแรง', cx, H - 8);
+}
+
+function pick(i) {
+  ans[cur] = i;
+  document.getElementById('btn-next').disabled = false;
+  document.querySelectorAll('.opt').forEach((el, idx) => el.classList.toggle('sel', idx === i));
+}
+
+function goNext() {
+  if (ans[cur] === null) return;
+  if (cur < Qs.length - 1) { cur++; renderQ(); }
+  else showResult();
+}
+
+function goBack() {
+  if (cur > 0) { cur--; renderQ(); }
+}
+
+function showResult() {
+  document.getElementById('quiz-wrap').style.display = 'none';
+  let sc = { mo: 0, ed: 0, mu: 0 };
+  ans.forEach((a, qi) => { if (a !== null) { const s = Qs[qi].opts[a].s; sc.mo += s.mo; sc.ed += s.ed; sc.mu += s.mu; } });
+  const tot = sc.mo + sc.ed + sc.mu;
+  const moPct = Math.round((sc.mo / tot) * 100);
+  const edPct = Math.round((sc.ed / tot) * 100);
+  const muPct = Math.round((sc.mu / tot) * 100);
+  const sorted = [{ k:'mo', v:sc.mo }, { k:'ed', v:sc.ed }, { k:'mu', v:sc.mu }].sort((a,b)=>b.v-a.v);
+  const recK = sorted[0].k, secK = sorted[1].k;
+  const info = {
+    mo: { name:'Monofocal IOL', sub:'เลนส์โฟกัสระยะเดียว (ไกล)', pros:['คุณภาพภาพคมชัดสูงสุด','Halo / glare น้อยมาก','เหมาะกับผู้มีโรคจอตา','อยู่ในสิทธิ์รักษา'] },
+    ed: { name:'EDOF IOL', sub:'เลนส์ขยายระยะโฟกัส (กลาง–ไกล)', pros:['มองระยะกลาง-ไกลโดยไม่ต้องแว่น','Halo ดีกว่า multifocal','เหมาะกับผู้ใช้คอมพิวเตอร์','ปรับตัวง่าย'] },
+    mu: { name:'Multifocal IOL', sub:'เลนส์โฟกัสหลายระยะ (ใกล้–กลาง–ไกล)', pros:['ลดการพึ่งแว่นได้มากที่สุด','มองครบทุกระยะ','เหมาะไลฟ์สไตล์กระฉับกระเฉง','อิสระจากแว่นในชีวิตประจำวัน'] }
+  };
+  const hasRetinal = ans[3] === 1;
+  const cautionHtml = hasRetinal ? `<div class="caution"><i class="ti ti-alert-triangle" aria-hidden="true"></i><div class="caution-txt"><strong>ข้อควรระวัง:</strong> คุณระบุว่ามีโรคจอตา ซึ่งอาจเป็นข้อห้ามสำหรับเลนส์ multifocal และ EDOF บางรุ่น กรุณาแจ้งจักษุแพทย์โดยตรง</div></div>` : '';
+  const r = info[recK], s2 = info[secK];
+  document.getElementById('res-wrap').innerHTML = `
+    <div class="res-section">
+      <div class="res-doctor">
+        <div style="font-size:11px;letter-spacing:.1em;color:var(--color-text-secondary);text-transform:uppercase;margin-bottom:4px">ผลการประเมิน</div>
+        <div style="font-size:16px;font-weight:500;color:var(--color-text-primary)">นพ.ณัฐวัฒน์ วงษ์ไชยคณากร</div>
+        <div style="font-size:12px;color:var(--color-text-secondary);margin-top:2px">จักษุแพทย์ผู้เชี่ยวชาญด้านต้อกระจก</div>
+      </div>
+      <div class="score-wrap">
+        <div class="score-row"><span class="score-lbl">Multifocal</span><div class="score-track"><div class="sf-blue" style="width:${muPct}%"></div></div><span class="score-pct">${muPct}%</span></div>
+        <div class="score-row"><span class="score-lbl">EDOF</span><div class="score-track"><div class="sf-teal" style="width:${edPct}%"></div></div><span class="score-pct">${edPct}%</span></div>
+        <div class="score-row"><span class="score-lbl">Monofocal</span><div class="score-track"><div class="sf-coral" style="width:${moPct}%"></div></div><span class="score-pct">${moPct}%</span></div>
+      </div>
+      <div class="lens-grid">
+        <div class="lens-card primary">
+          <div class="lbadge p"><i class="ti ti-star" aria-hidden="true" style="font-size:11px"></i> เหมาะสมที่สุด</div>
+          <div class="lname">${r.name}</div>
+          <div class="lsub">${r.sub}</div>
+          <ul class="lpros">${r.pros.map(p=>`<li><i class="ti ti-check" aria-hidden="true"></i>${p}</li>`).join('')}</ul>
+        </div>
+        <div class="lens-card second">
+          <div class="lbadge s"><i class="ti ti-thumb-up" aria-hidden="true" style="font-size:11px"></i> ตัวเลือกรอง</div>
+          <div class="lname">${s2.name}</div>
+          <div class="lsub">${s2.sub}</div>
+          <ul class="lpros">${s2.pros.map(p=>`<li><i class="ti ti-check" aria-hidden="true"></i>${p}</li>`).join('')}</ul>
+        </div>
+      </div>
+      ${cautionHtml}
+      <div class="disclaimer">
+        <i class="ti ti-info-circle" aria-hidden="true"></i>
+        <span>ผลนี้เป็นเพียงแนวทางเบื้องต้นจากข้อมูลไลฟ์สไตล์ของคุณ การตัดสินใจเลือกเลนส์แก้วตาเทียมควรอยู่ภายใต้การพิจารณาของจักษุแพทย์ร่วมกับผล keratometry, biometry และสภาพตาจริงของคุณ</span>
+      </div>
+      <button class="btn-restart" onclick="restart()"><i class="ti ti-refresh" aria-hidden="true"></i> ทำแบบประเมินใหม่</button>
+    </div>
+    <div class="page-footer">
+      <div class="footer-doctor">นพ.ณัฐวัฒน์ วงษ์ไชยคณากร</div>
+      <div class="footer-sub">จักษุแพทย์ผู้เชี่ยวชาญด้านต้อกระจกและการผ่าตัดเปลี่ยนเลนส์แก้วตา</div>
+    </div>
+  `;
+  document.getElementById('res-wrap').style.display = 'block';
+}
+
+function restart() {
+  cur = 0; ans = new Array(Qs.length).fill(null);
+  document.getElementById('res-wrap').style.display = 'none';
+  document.getElementById('quiz-wrap').style.display = 'block';
+  renderQ();
+}
+
+renderQ();
+</script>
